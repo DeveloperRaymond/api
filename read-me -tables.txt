@@ -1,0 +1,193 @@
+
+-------------------------------------------
+Catalog
+-------------------------------------------
+
+* products 
+* categories
+* brands
+* prices
+* options
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+-------------------------------------------
+catalog
+-------------------------------------------
+- brand
+- category
+- product
+- specifications
+- media
+
+Todo
+- change table names
+
+
+-------------------------------------------
+product
+-------------------------------------------
+CREATE TABLE [dbo].[Catalog_Product](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](450) NOT NULL,
+	[Slug] [nvarchar](450) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[ShortDescription] [nvarchar](450) NULL,
+	[Description] [nvarchar](max) NULL,
+	[Price] [decimal](18, 2) NOT NULL,
+	[HasOptions] [bit] NOT NULL,
+	[IsVisibleIndividually] [bit] NOT NULL,
+	[IsCallForPricing] [bit] NOT NULL,
+	[StockTrackingIsEnabled] [bit] NOT NULL,
+	[StockQuantity] [int] NOT NULL,
+	[Sku] [nvarchar](450) NULL,
+	[Gtin] [nvarchar](450) NULL,
+	[NormalizedName] [nvarchar](450) NULL,
+	[DisplayOrder] [int] NOT NULL,
+
+	[ThumbnailImageId] [bigint] NULL,
+	[VendorId] [bigint] NULL,
+	[BrandId] [bigint] NULL,
+	
+	[CreatedById] [bigint] NOT NULL,
+	[CreatedOn] [datetimeoffset](7) NOT NULL,
+	[LatestUpdatedOn] [datetimeoffset](7) NOT NULL,
+	[LatestUpdatedById] [bigint] NOT NULL,
+
+ CONSTRAINT [PK_Catalog_Product] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+-------------------------------------------
+brand
+-------------------------------------------
+
+CREATE TABLE [dbo].[Catalog_Brand](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](450) NOT NULL,
+	[Slug] [nvarchar](450) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_Catalog_Brand] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+-------------------------------------------
+Category
+-------------------------------------------
+
+CREATE TABLE [dbo].[Catalog_Category](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](450) NOT NULL,
+	[Slug] [nvarchar](450) NOT NULL,
+	[DisplayOrder] [int] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[ParentId] [bigint] NULL,
+	[ThumbnailImageId] [bigint] NULL,
+ CONSTRAINT [PK_Catalog_Category] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+-------------------------------------------
+Price
+-------------------------------------------
+CREATE TABLE [dbo].[Catalog_ProductPriceHistory](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[ProductId] [bigint] NULL,
+	[CreatedById] [bigint] NOT NULL,
+	[CreatedOn] [datetimeoffset](7) NOT NULL,
+	[Price] [decimal](18, 2) NULL,
+	[OldPrice] [decimal](18, 2) NULL,
+ CONSTRAINT [PK_Catalog_ProductPriceHistory] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+-------------------------------------------
+Options
+-------------------------------------------
+CREATE TABLE [dbo].[Catalog_ProductOption](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](450) NOT NULL,
+ CONSTRAINT [PK_Catalog_ProductOption] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+-------------------------------------------
+ProductCategoryMapping
+-------------------------------------------
+
+CREATE TABLE [dbo].[Catalog_ProductCategory](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[IsFeaturedProduct] [bit] NOT NULL,
+	[DisplayOrder] [int] NOT NULL,
+	[CategoryId] [bigint] NOT NULL,
+	[ProductId] [bigint] NOT NULL,
+ CONSTRAINT [PK_Catalog_ProductCategory] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+-------------------------------------------
+ProductMediaMapping
+-------------------------------------------
+
+CREATE TABLE [dbo].[Catalog_ProductMedia](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[ProductId] [bigint] NOT NULL,
+	[MediaId] [bigint] NOT NULL,
+	[DisplayOrder] [int] NOT NULL,
+ CONSTRAINT [PK_Catalog_ProductMedia] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+-------------------------------------------
+ProductLinkMapping
+-------------------------------------------
+CREATE TABLE [dbo].[Catalog_ProductLink](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[ProductId] [bigint] NOT NULL,
+	[LinkedProductId] [bigint] NOT NULL,
+ CONSTRAINT [PK_Catalog_ProductLink] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+-------------------------------------------
+ProductOptionMapping
+-------------------------------------------
+
+CREATE TABLE [dbo].[Catalog_ProductOptionCombination](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[ProductId] [bigint] NOT NULL,
+	[OptionId] [bigint] NOT NULL,
+	[Value] [nvarchar](450) NULL,
+	[SortIndex] [int] NOT NULL,
+ CONSTRAINT [PK_Catalog_ProductOptionCombination] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
